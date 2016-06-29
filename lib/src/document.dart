@@ -5,6 +5,7 @@
 import 'dart:convert';
 
 import 'resource.dart';
+import 'error.dart';
 
 /// Dartlang representation of a JSON API Document object.
 /// Conforms to the JsonApi 1.0 specification.
@@ -23,7 +24,7 @@ class JSONAPIDocument {
   /// The errors array of the JSON API Document, empty if no errors have been
   /// received.
   /// This member is mandatory by JSON API specification.
-  List<Object> errors;
+  List<JSONAPIError> errors;
 
   /// The links object of the JSON API Document.
   /// This member is optional by JSON API specification.
@@ -37,7 +38,13 @@ class JSONAPIDocument {
   JSONAPIDocument(Map dictionary) {
     if ((!dictionary.containsKey('data')) &&
         (!dictionary.containsKey('errors'))) {
-      throw new FormatException("Missing data");
+      throw new FormatException("Missing data or error");
+    }
+
+    if ((dictionary.containsKey('data')) &&
+        (dictionary.containsKey('errors'))) {
+      throw new FormatException(
+          "A JSON API document cannot include both data and error");
     }
 
     if (dictionary.containsKey('data')) {
@@ -45,7 +52,7 @@ class JSONAPIDocument {
     }
 
     if (dictionary.containsKey('errors')) {
-      errors = dictionary['errors'];
+      errors = new JSONAPIErrorList(dictionary['errors']);
     }
 
     if (dictionary.containsKey('meta')) {
@@ -65,7 +72,7 @@ class JSONAPIDocument {
     Map map = new Map();
 
     if (data != null) {
-      if (data is JSONAPIResource){
+      if (data is JSONAPIResource) {
         map['data'] = (data as JSONAPIResource).toJson();
       } else {
         map['data'] = (data as JSONAPIResourceList).toJson();
@@ -92,8 +99,8 @@ class JSONAPIDocument {
     return map;
   }
 
-  _initResourceFromData(rawData){
-    if (rawData is List<Object>){
+  _initResourceFromData(rawData) {
+    if (rawData is List<Object>) {
       return new JSONAPIResourceList(rawData);
     } else {
       return new JSONAPIResource(rawData);
