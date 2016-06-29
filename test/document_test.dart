@@ -11,6 +11,7 @@ void main() {
   group("test Document creation", () {
     test("create a JSONAPIDocument from a correct Map", () {
       Map dataMap = new Map();
+      dataMap['type'] = 'person';
       dataMap['attributes'] = new Map();
       dataMap['attributes']['name'] = 'Pasquale';
 
@@ -22,11 +23,13 @@ void main() {
       JSONAPIDocument expectedDocument = new JSONAPIDocument(aMap);
 
       expect(expectedDocument.data != null, equals(true));
+      expect(expectedDocument.data is JSONAPIResource, equals(true));
       expect(expectedDocument.errors.length, equals(0));
     });
 
     test("create a JSONAPIDocument with no data or errors", () {
       Map dataMap = new Map();
+      dataMap['type'] = 'person';
       dataMap['attributes'] = new Map();
       dataMap['attributes']['name'] = 'Pasquale';
 
@@ -41,7 +44,7 @@ void main() {
 
   group("test Document conversion", () {
     test("encode JSONDocument into a Map", () {
-      String inputJson = '{"data":{"attributes":{"name":"Pasquale"}}}';
+      String inputJson = '{"data":{"type":"person","attributes":{"name":"Pasquale"}}}';
 
       Map aMap = JSON.decode(inputJson);
       JSONAPIDocument document = new JSONAPIDocument(aMap);

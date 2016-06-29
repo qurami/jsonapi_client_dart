@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'resource.dart';
+
 /// Dartlang representation of a JSON API Document object.
 /// Conforms to the JsonApi 1.0 specification.
 /// For any further information please visit http://jsonapi.org
@@ -28,8 +30,8 @@ class JSONAPIDocument {
   List<Object> links;
 
   /// The included resources array of the JSON API Document.
-  // If any resource has been included, it's stored in this array following
-  // jsonapi specification, otherwise this array is empty.
+  /// If any resource has been included, it's stored in this array following
+  /// jsonapi specification, otherwise this array is empty.
   List<Object> included;
 
   JSONAPIDocument(Map dictionary) {
@@ -39,7 +41,7 @@ class JSONAPIDocument {
     }
 
     if (dictionary.containsKey('data')) {
-      data = dictionary['data'];
+      data = _initResourceFromData(dictionary['data']);
     }
 
     if (dictionary.containsKey('errors')) {
@@ -55,7 +57,7 @@ class JSONAPIDocument {
     }
 
     if (dictionary.containsKey('included')) {
-      included = dictionary['included'];
+      included = _initResourceFromData(dictionary['included']);
     }
   }
 
@@ -63,7 +65,11 @@ class JSONAPIDocument {
     Map map = new Map();
 
     if (data != null) {
-      map['data'] = JSON.decode(JSON.encode(data));
+      if (data is JSONAPIResource){
+        map['data'] = (data as JSONAPIResource).toJson();
+      } else {
+        map['data'] = (data as JSONAPIResourceList).toJson();
+      }
     }
 
     if (errors != null) {
@@ -79,9 +85,18 @@ class JSONAPIDocument {
     }
 
     if (included != null) {
-      map['included'] = JSON.decode(JSON.encode(included));
+      // included objects are always in a list!
+      map['included'] = (data as JSONAPIResourceList).toJson();
     }
 
     return map;
+  }
+
+  _initResourceFromData(rawData){
+    if (rawData is List<Object>){
+      return new JSONAPIResourceList(rawData);
+    } else {
+      return new JSONAPIResource(rawData);
+    }
   }
 }
