@@ -4,4 +4,5 @@
 
 export 'src/document.dart';
 export 'src/resource.dart';
+export 'src/error.dart';
 //export 'src/client.dart';
