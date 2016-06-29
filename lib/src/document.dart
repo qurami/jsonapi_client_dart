@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // MIT license that can be found in the LICENSE file.
 
-import 'dart:convert';
-
 import 'resource.dart';
 import 'error.dart';
 
@@ -12,7 +10,7 @@ import 'error.dart';
 /// For any further information please visit http://jsonapi.org
 class JSONAPIDocument {
   /// The meta object of the JSON API Document.
-  Object meta;
+  Map meta;
 
   /// The data object of the JSON API Document.
   /// This member is mandatory by jsonapi specification. This object, by jsonapi
@@ -24,11 +22,11 @@ class JSONAPIDocument {
   /// The errors array of the JSON API Document, empty if no errors have been
   /// received.
   /// This member is mandatory by JSON API specification.
-  List<JSONAPIError> errors;
+  JSONAPIErrorList errors;
 
   /// The links object of the JSON API Document.
   /// This member is optional by JSON API specification.
-  List<Object> links;
+  Map links;
 
   /// The included resources array of the JSON API Document.
   /// If any resource has been included, it's stored in this array following
@@ -80,15 +78,15 @@ class JSONAPIDocument {
     }
 
     if (errors != null) {
-      map['errors'] = JSON.decode(JSON.encode(errors));
+      map['errors'] = errors.toJson();
     }
 
     if (meta != null) {
-      map['meta'] = JSON.decode(JSON.encode(meta));
+      map['meta'] = meta;
     }
 
     if (links != null) {
-      map['links'] = JSON.decode(JSON.encode(links));
+      map['links'] = links;
     }
 
     if (included != null) {

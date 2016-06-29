@@ -17,7 +17,6 @@ void main() {
 
       Map inputMap = new Map();
       inputMap['data'] = dataMap;
-      inputMap['meta'] = new List<Object>();
 
       JSONAPIDocument expectedDocument = new JSONAPIDocument(inputMap);
 
