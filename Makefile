@@ -28,4 +28,4 @@ app:
 	$(PUB) global run tuneup check
 
 tests:
-	pub run test
+	$(PUB) run test
