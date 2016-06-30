@@ -46,7 +46,8 @@ class JSONAPIDocument {
   JSONAPIDocument(Map dictionary) {
     if ((!dictionary.containsKey('data')) &&
         (!dictionary.containsKey('errors'))) {
-      throw new FormatException("Missing data or error");
+      throw new FormatException(
+          "A JSON API document must include data or error");
     }
 
     if ((dictionary.containsKey('data')) &&
