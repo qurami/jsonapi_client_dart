@@ -6,60 +6,68 @@ import 'dart:collection';
 
 class JSONAPIError {
   /// The id of the JSON API Error.
-  String id;
+  String _id;
+  String get id => _id;
 
   /// The status of the JSON API Error.
-  String status;
+  String _status;
+  String get status => _status;
 
   /// The code of the JSON API Error.
-  String code;
+  String _code;
+  String get code => _code;
 
   /// The title of the JSON API Error.
-  String title;
+  String _title;
+  String get title => _title;
 
   /// The details of the JSON API Error.
-  String detail;
+  String _detail;
+  String get detail => _detail;
 
   /// The links object of the JSON API Error.
-  Map links;
+  Map _links;
+  Map get links => _links;
 
   /// The source object of the JSON API Error.
-  Map source;
+  Map _source;
+  Map get source => _source;
 
   /// The meta object the JSON API Error.
-  Map meta;
+  Map _meta;
+  Map get meta => _meta;
 
   JSONAPIError(Map dictionary) {
     if (dictionary.containsKey('id')) {
-      id = dictionary['id'];
+      _id = dictionary['id'];
     }
 
     if (dictionary.containsKey('status')) {
-      status = dictionary['status'];
+      _status = dictionary['status'];
     }
 
     if (dictionary.containsKey('code')) {
-      code = dictionary['code'];
+      _code = dictionary['code'];
     }
 
     if (dictionary.containsKey('title')) {
-      title = dictionary['title'];
+      _title = dictionary['title'];
     }
 
     if (dictionary.containsKey('detail')) {
-      detail = dictionary['detail'];
+      _detail = dictionary['detail'];
     }
 
     if (dictionary.containsKey('links')) {
-      links = dictionary['links'];
+      _links = dictionary['links'];
     }
 
     if (dictionary.containsKey('source')) {
-      source = dictionary['source'];
+      _source = dictionary['source'];
     }
 
     if (dictionary.containsKey('meta')) {
-      meta = dictionary['meta'];
+      _meta = dictionary['meta'];
     }
   }
 

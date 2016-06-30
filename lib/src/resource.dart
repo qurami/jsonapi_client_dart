@@ -11,41 +11,46 @@ class JSONAPIResource {
   /// The id of the JSON API Resource.
   /// The id is not required when the resource object originates at the
   /// client and represents a new resource to be created on the server.
-  String id;
+  String _id;
+  String get id => _id;
 
   /// The type of the JSON API Resource
-  String type;
+  String _type;
+  String get type => _type;
 
   /// The attributes of the JSON API Resource, represented as a Map.
-  Map attributes;
+  Map _attributes;
+  Map get attributes => _attributes;
 
   /// The links of the JSON API Resource, represented as a Map.
-  Map links; // @TODO: change to JSONAPILinkList?
+  Map _links; // @TODO: change to JSONAPILinkList?
+  Map get links => _links;
 
   /// The relationships of the JSON API Resource, represented as a Map.
-  Map relationships; // @TODO: change to JSONAPIRelationshipList?
+  Map _relationships; // @TODO: change to JSONAPIRelationshipList?
+  Map get relationships => _relationships;
 
   JSONAPIResource(Map dictionary) {
     if (!dictionary.containsKey('type')) {
       throw new FormatException("Missing type");
     }
 
-    type = dictionary['type'];
+    _type = dictionary['type'];
 
     if (dictionary.containsKey('id')) {
-      id = dictionary['id'];
+      _id = dictionary['id'];
     }
 
     if (dictionary.containsKey('attributes')) {
-      attributes = dictionary['attributes'];
+      _attributes = dictionary['attributes'];
     }
 
     if (dictionary.containsKey('links')) {
-      links = dictionary['links'];
+      _links = dictionary['links'];
     }
 
     if (dictionary.containsKey('relationships')) {
-      relationships = dictionary['relationships'];
+      _relationships = dictionary['relationships'];
     }
   }
 
