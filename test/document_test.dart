@@ -7,16 +7,19 @@ import 'dart:convert';
 import "package:jsonapi_client/jsonapi_client.dart";
 import "package:test/test.dart";
 
+Map getMockJSONAPIResourceAsMap() {
+  Map dataMap = new Map();
+  dataMap['type'] = 'person';
+  dataMap['attributes'] = new Map();
+  dataMap['attributes']['name'] = 'Pasquale';
+  return dataMap;
+}
+
 void main() {
   group("test Document creation", () {
-    test("create a JSONAPIDocument from a correct Map", () {
-      Map dataMap = new Map();
-      dataMap['type'] = 'person';
-      dataMap['attributes'] = new Map();
-      dataMap['attributes']['name'] = 'Pasquale';
-
+    test("create a JSONAPIDocument with a single resource", () {
       Map inputMap = new Map();
-      inputMap['data'] = dataMap;
+      inputMap['data'] = getMockJSONAPIResourceAsMap();
 
       JSONAPIDocument expectedDocument = new JSONAPIDocument(inputMap);
 
@@ -25,12 +28,22 @@ void main() {
       expect(expectedDocument.errors == null, equals(true));
     });
 
-    test("create a JSONAPIDocument from a wrong Map with both data and errors", () {
-      Map dataMap = new Map();
-      dataMap['type'] = 'person';
-      dataMap['attributes'] = new Map();
-      dataMap['attributes']['name'] = 'Pasquale';
+    test("create a JSONAPIDocument with multiple resources", () {
+      List<Map> dataList = new List<Map>();
+      dataList.add(getMockJSONAPIResourceAsMap());
+      dataList.add(getMockJSONAPIResourceAsMap());
 
+      Map inputMap = new Map();
+      inputMap['data'] = dataList;
+
+      JSONAPIDocument expectedDocument = new JSONAPIDocument(inputMap);
+
+      expect(expectedDocument.data != null, equals(true));
+      expect(expectedDocument.data is JSONAPIResourceList, equals(true));
+      expect(expectedDocument.errors == null, equals(true));
+    });
+
+    test("create a JSONAPIDocument from a Map with both data and errors", () {
       List<Map> errorListMap = new List<Map>();
 
       Map errorMap = new Map();
@@ -40,7 +53,7 @@ void main() {
       errorListMap.add(errorMap);
 
       Map inputMap = new Map();
-      inputMap['data'] = dataMap;
+      inputMap['data'] = getMockJSONAPIResourceAsMap();
       inputMap['errors'] = errorListMap;
       inputMap['meta'] = new List<Object>();
 
@@ -49,14 +62,8 @@ void main() {
       }, throwsFormatException);
     });
 
-    test("create a JSONAPIDocument with no data or errors", () {
-      Map dataMap = new Map();
-      dataMap['type'] = 'person';
-      dataMap['attributes'] = new Map();
-      dataMap['attributes']['name'] = 'Pasquale';
-
+    test("create a JSONAPIDocument from an empty map", () {
       Map aMap = new Map();
-      aMap['dat0'] = dataMap; // wrong key here!
 
       expect(() {
         new JSONAPIDocument(aMap);
@@ -66,7 +73,8 @@ void main() {
 
   group("test Document conversion", () {
     test("encode JSONDocument into a Map", () {
-      String inputJson = '{"data":{"type":"person","attributes":{"name":"Pasquale"}}}';
+      String inputJson =
+          '{"data":{"type":"person","attributes":{"name":"Pasquale"}}}';
 
       Map aMap = JSON.decode(inputJson);
       JSONAPIDocument document = new JSONAPIDocument(aMap);

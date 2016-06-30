@@ -9,7 +9,7 @@ import "package:test/test.dart";
 
 void main() {
   group("test Resource creation", () {
-    test("create a JSONAPIResource from a correct Map", () {
+    test("create a JSONAPIResource from a Map", () {
       Map dataMap = new Map();
       dataMap['type'] = 'person';
       dataMap['attributes'] = new Map();
@@ -20,9 +20,8 @@ void main() {
       expect(expectedResource.type, equals('person'));
     });
 
-    test("create a JSONAPIResource with no data or errors", () {
+    test("create a JSONAPIResource with no type", () {
       Map dataMap = new Map();
-      dataMap['typ3'] = 'person';
       dataMap['attributes'] = new Map();
       dataMap['attributes']['name'] = 'Pasquale';
 
@@ -44,7 +43,8 @@ void main() {
     });
 
     test("encode JSONAPIResourceList into a Map", () {
-      String inputJson = '[{"type":"person","attributes":{"name":"Pasquale"}},{"type":"person","attributes":{"name":"Federico"}}]';
+      String inputJson =
+          '[{"type":"person","attributes":{"name":"Pasquale"}},{"type":"person","attributes":{"name":"Federico"}}]';
 
       List<Map> inputMap = JSON.decode(inputJson);
       JSONAPIResourceList resourceList = new JSONAPIResourceList(inputMap);
