@@ -1,0 +1,15 @@
+general:
+  artifacts:
+    - "~/build" # relative to the user's home directory
+
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - make app
+
+test:
+  override:
+    - make tests
