@@ -10,5 +10,6 @@ authors:
   - Gianfranco Reppucci <gianfranco.reppucci@qurami.com>
 homepage: https://github.com/qurami/jsonapi_client_dart
 dependencies:
+  http: "0.11.3+7"
   mockito: "^0.11.0"
   test: "^0.12.13+4"
