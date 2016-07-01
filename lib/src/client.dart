@@ -42,7 +42,7 @@ class JSONAPIClient {
         additionalHeaders: headers);
   }
 
-  Future<JSONAPIDocument> delete(String url, {Map headers}) async {
+  Future delete(String url, {Map headers}) async {
     return _call('DELETE', url, additionalHeaders: headers);
   }
 
