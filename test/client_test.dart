@@ -188,7 +188,6 @@ void main() {
         await c.delete('http://mockapi.test/persons/1');
       } catch(e){
         expectedException = e;
-        print(e);
       }
 
       expect(c.request.method, equals('DELETE'));
