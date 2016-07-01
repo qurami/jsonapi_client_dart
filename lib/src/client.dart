@@ -76,6 +76,26 @@ class JSONAPIClient {
 
     http.StreamedResponse response = await _http.send(request);
 
-    return new JSONAPIDocument(JSON.decode(await response.stream.bytesToString()));
+    switch (method){
+      case 'POST':
+        switch (response.statusCode){
+          case 202: // Accepted
+          case 204: // No content
+            return null;
+        }
+        continue defaultCase;
+
+      case 'DELETE':
+        switch (response.statusCode){
+          case 204: // No content
+            return null;
+        }
+        continue defaultCase;
+
+    defaultCase:
+      case 'GET':
+      default:
+        return new JSONAPIDocument(JSON.decode(await response.stream.bytesToString()));
+    }
   }
 }
