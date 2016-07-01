@@ -1,87 +1,37 @@
-/*
-import 'dart:async';
-import "dart:convert";
+// Copyright (c) 2016, Qurami team.  Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// MIT license that can be found in the LICENSE file.
 
-//import 'package:qurami_com/services/qurami_bdm/qurami_http_client.dart';
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:http/browser_client.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
+
+import 'document.dart';
 
 class JSONAPIClient {
-  String lastRequestURL;
-  Map lastRequestHeaders;
+  final _JSONAPIDefaultHeaders = new Map<String, String>()
+  ..['Accept'] = 'application/vnd.api+json'
+  ..['Content-Type'] = 'application/vnd.api+json';
 
-  final QuramiHTTPClient _http;
+  http.Request request;
 
-  JSONAPIClient(this._http);
+  var _http;
 
-  String _composeUrl(String url, String objectId, List<String> includeModels) {
-    if (objectId != null) {
-      url += "/" + objectId;
+  JSONAPIClient({dynamic httpClient: null}) {
+    if (httpClient != null) {
+      _http = httpClient;
+    } else {
+      _http = new BrowserClient();
     }
-
-    if (includeModels != null) {
-      url += "?include=" + includeModels.join(",");
-    }
-
-    return url;
-  }
-
-  _call(String method, String url,
-      {String objectId: null,
-      String payload: null,
-      List<String> includeModels: null,
-      Map additionalHeaders: null}) async {
-    String dataUrl = _composeUrl(url, objectId, includeModels);
-
-    var parameters;
-    if (payload != null) parameters = payload;
-
-    Map<String, String> requestHeaders = new Map<String, String>();
-    requestHeaders['Accept'] = 'application/vnd.api+json';
-    requestHeaders['Content-Type'] = 'application/vnd.api+json';
-    requestHeaders['X-Nova-Version'] = '2';
-
-    if (additionalHeaders != null) {
-      requestHeaders.addAll(additionalHeaders);
-    }
-
-    lastRequestURL = dataUrl;
-    lastRequestHeaders = requestHeaders;
-
-    String response =
-        await _http.execute(method, dataUrl, requestHeaders, parameters);
-
-    print("Calling URL: " + dataUrl);
-
-    JSONAPIDocument document = new JSONAPIDocument();
-
-    // ticket delete return empty
-    if (response.isNotEmpty) {
-      Map outputMap = JSON.decode(response);
-
-      if (outputMap.containsKey('errors')) {
-        document.errors = outputMap['errors'];
-      }
-
-      if (outputMap.containsKey('data')) {
-        document.data = outputMap['data'];
-      }
-
-      if (outputMap.containsKey('included')) {
-        document.included = outputMap['included'];
-      }
-
-      if (outputMap.containsKey('meta')) {
-        document.meta = outputMap['meta'];
-      }
-    }
-    return document;
   }
 
   Future<JSONAPIDocument> get(String url,
-      {String objectId, List<String> includeModels, Map headers}) async {
+      {List<String> includeModels, Map headers}) async {
     return _call('GET', url,
-        objectId: objectId,
-        includeModels: includeModels,
-        additionalHeaders: headers);
+        includeModels: includeModels, additionalHeaders: headers);
   }
 
   Future<JSONAPIDocument> post(String url, Object document,
@@ -92,10 +42,40 @@ class JSONAPIClient {
         additionalHeaders: headers);
   }
 
-  Future<JSONAPIDocument> delete(String url,
-      {String objectId, Map headers}) async {
-    return _call('DELETE', url, objectId: objectId, additionalHeaders: headers);
+  Future<JSONAPIDocument> delete(String url, {Map headers}) async {
+    return _call('DELETE', url, additionalHeaders: headers);
+  }
+
+  Uri _composeUri(String url, List<String> includeModels) {
+    String queryOperator = '?';
+    if (url.contains(queryOperator)){
+      queryOperator = '&';
+    }
+
+    if (includeModels != null) {
+      url += queryOperator + "include=" + includeModels.join(",");
+    }
+
+    return path.toUri(url);
+  }
+
+  _call(String method, String url,
+      {dynamic payload: null,
+      List<String> includeModels: null,
+      Map additionalHeaders: null}) async {
+
+    request = new http.Request(method, _composeUri(url, includeModels));
+
+    if (payload != null)
+      request.body = payload;
+
+    request.headers.addAll(_JSONAPIDefaultHeaders);
+    if (additionalHeaders != null) {
+      request.headers.addAll(additionalHeaders);
+    }
+
+    http.StreamedResponse response = await _http.send(request);
+
+    return new JSONAPIDocument(JSON.decode(await response.stream.bytesToString()));
   }
 }
-
-*/
