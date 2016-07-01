@@ -34,7 +34,7 @@ class JSONAPIClient {
         includeModels: includeModels, additionalHeaders: headers);
   }
 
-  Future<JSONAPIDocument> post(String url, Object document,
+  Future<JSONAPIDocument> post(String url, String document,
       {List<String> includeModels, Map headers}) async {
     return _call('POST', url,
         payload: document,
@@ -60,7 +60,7 @@ class JSONAPIClient {
   }
 
   _call(String method, String url,
-      {dynamic payload: null,
+      {String payload: null,
       List<String> includeModels: null,
       Map additionalHeaders: null}) async {
 
