@@ -28,4 +28,4 @@ app:
 	$(PUB) global run tuneup check
 
 tests:
-	$(PUB) run test
+	$(PUB) run test -p chrome
