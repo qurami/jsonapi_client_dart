@@ -6,16 +6,12 @@ Dartlang implementation of JSON API Client, adherent to [JSON API](http://jsonap
 
 ## Installation
 
-Add `jsonapi_client_dart` to your pubspec.yaml:
+Add `jsonapi_client` to your pubspec.yaml:
 
 ```
 dependencies:
-  jsonapi_client_dart:
-    git:
-      url: https://github.com/qurami/jsonapi_client_dart.git
+  jsonapi_client: "0.0.1"
 ```
-
-`pub` version is not available at the moment.
 
 
 ## Usage
