@@ -53,3 +53,26 @@ Used to create a document containing a JSON API resource.
 Used to delete a resource.
 
 `Future delete(String url, {Map headers})`
+
+
+## Tests
+
+You can test your application which uses JSONAPIClient by using the included `MockJSONAPIClient` class.
+
+```
+MockJSONAPIClient mockClient = new MockJSONAPIClient();
+JSONAPIDocument mockDocument = new JSONAPIDocument({
+  "data": {
+      "id": "1",
+      "type": "persons",
+      "attributes": {
+        "name": "Gianfranco",
+        "surname": "Reppucci"
+      }
+    }
+});
+
+mockClient.setOutput(mockDocument);
+
+mockClient.get('http://mockapi.test/persons/1') // will return mockDocument as output
+```
