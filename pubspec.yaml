@@ -1,5 +1,5 @@
 name: jsonapi_client
-version: 0.0.1
+version: 0.2.0
 environment:
   sdk: '>=1.13.0 <2.0.0'
 description: >
