@@ -10,7 +10,7 @@ Add `jsonapi_client` to your pubspec.yaml:
 
 ```
 dependencies:
-  jsonapi_client: "0.0.1"
+  jsonapi_client: "0.2.1"
 ```
 
 
