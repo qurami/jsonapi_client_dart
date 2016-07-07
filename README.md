@@ -10,7 +10,7 @@ Add `jsonapi_client` to your pubspec.yaml:
 
 ```
 dependencies:
-  jsonapi_client: "0.0.1"
+  jsonapi_client: "0.2.1"
 ```
 
 
@@ -61,6 +61,7 @@ You can test your application which uses JSONAPIClient by using the included `Mo
 
 ```
 MockJSONAPIClient mockClient = new MockJSONAPIClient();
+
 JSONAPIDocument mockDocument = new JSONAPIDocument({
   "data": {
       "id": "1",
@@ -72,7 +73,25 @@ JSONAPIDocument mockDocument = new JSONAPIDocument({
     }
 });
 
+payload = '''
+{
+  "data": {
+      "type": "persons",
+      "attributes": {
+        "name": "Gianfranco",
+        "surname": "Reppucci"
+      }
+    }
+}
+''';
+
 mockClient.setOutput(mockDocument);
 
-mockClient.get('http://mockapi.test/persons/1') // will return mockDocument as output
+mockClient.post('http://mockapi.test/persons', payload, includeModels: ['company'], headers: {'X-Test': 'Mock-Value'}); // will return mockDocument as output
+
+// you can access the last request by using these mock client getters
+mockClient.requestUrl
+mockClient.requestPayload
+mockClient.requestIncludedModels
+mockClient.requestHeaders
 ```
