@@ -7,3 +7,5 @@ export 'src/resource.dart';
 export 'src/error.dart';
 export 'src/client.dart';
 export 'src/mock_client.dart';
+export 'src/resource_factory.dart';
+export 'src/factory_buildable_object.dart';
